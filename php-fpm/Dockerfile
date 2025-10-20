@@ -56,7 +56,7 @@ RUN install-php-extensions \
     redis \
     sysvsem \
     opcache \
-    imagick/imagick@master
+    imagick
 
 # Copy optimized php.ini
 COPY ./php.ini-production /usr/local/etc/php/php.ini
