@@ -74,6 +74,17 @@ Install Nextcloud how you usually would through the web interface. Use the Maria
 Edit `/your/nextcloud/root/nextcloud/config/config.php` and add the following optimizations:
 
 ```
+  'preview_max_x' => 1440,
+  'preview_max_y' => 1440,
+  'jpeg_quality' => 60,
+  'preview_max_memory' => 512,
+  'enabledPreviewProviders' => [
+    'OC\Preview\Image',
+    'OC\Preview\MP3',
+    'OC\Preview\PDF',
+    'OC\Preview\Movie',
+  ],
+
 'memcache.local' => '\\OC\\Memcache\\APCu',
 'maintenance_window_start' => 1,
 'filelocking.enabled' => true,
