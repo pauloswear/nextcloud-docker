@@ -84,16 +84,21 @@ Edit `/your/nextcloud/root/nextcloud/config/config.php` and add the following op
     'OC\Preview\PDF',
     'OC\Preview\Movie',
   ],
-
-'memcache.local' => '\\OC\\Memcache\\APCu',
-'maintenance_window_start' => 1,
-'filelocking.enabled' => true,
-'memcache.locking' => '\OC\Memcache\Redis',
-'redis' => array(
+  'trashbin_retention_obligation' => '7,30',
+  'versions_retention_obligation' => 'auto,30',
+  'memcache.distributed' => '\OC\Memcache\Redis',
+  'memcache.local' => '\\OC\\Memcache\\APCu',
+  'maintenance_window_start' => 1,
+  'filelocking.enabled' => true,
+  'filesystem_check_changes' => 0,
+  'memcache.locking' => '\OC\Memcache\Redis',
+  'redis' => array(
     'host' => 'redis-nextcloud',
     'port' => 6379,
-    'timeout' => 0.0,
-),
+    'timeout' => 1.5,
+  ),
+);
+
 ```
 
 ### Editing nginx.conf

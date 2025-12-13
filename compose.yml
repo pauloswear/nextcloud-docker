@@ -18,18 +18,27 @@ services:
       - mariadb-nextcloud
     restart: unless-stopped
 
+
   php-fpm-nextcloud:
     container_name: php-fpm-nextcloud
     build:
       context: ./php-fpm
+      dockerfile: Dockerfile
       tags:
         - localhost/php-fpm-nextcloud:latest
     volumes:
       - ${NEXTCLOUD_DIR}:/var/www/html
       - ${DATA_DIR}:/data
+      # custom PHP configs (sem sobrescrever as extensões)
+      - ./php-fpm/conf.d/90-nextcloud.ini:/usr/local/etc/php/conf.d/90-nextcloud.ini:ro
+      - ./php-fpm/conf.d/90-apcu.ini:/usr/local/etc/php/conf.d/90-apcu.ini:ro
+      - ./php-fpm/conf.d/99-opcache.ini:/usr/local/etc/php/conf.d/99-opcache.ini:ro
+      # FPM pool
+      - ./php-fpm/conf-fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
     networks:
       - nextcloud
     restart: unless-stopped
+
 
   mariadb-nextcloud:
     container_name: mariadb-nextcloud
@@ -37,6 +46,8 @@ services:
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     volumes:
       - ${MARIADB_DIR}:/var/lib/mysql
+      - ./mariadb/conf:/etc/mysql/conf.d
+
     environment:
       - MYSQL_ROOT_PASSWORD=${MARIADB_ROOT_PASS}
       - MYSQL_PASSWORD=${MARIADB_PASS}
@@ -46,12 +57,14 @@ services:
       - nextcloud
     restart: unless-stopped
 
+
   redis-nextcloud:
     container_name: redis-nextcloud
     image: redis:latest
     restart: unless-stopped
     networks:
       - nextcloud
+
 
   cron-nextcloud:
     container_name: cron-nextcloud
@@ -68,6 +81,7 @@ services:
       - redis-nextcloud
       - mariadb-nextcloud
     restart: unless-stopped
+
 
 networks:
   nextcloud:

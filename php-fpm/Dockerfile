@@ -22,7 +22,10 @@ RUN apt-get update && apt-get install -y \
 RUN curl -sSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions -o /usr/local/bin/install-php-extensions \
     && chmod +x /usr/local/bin/install-php-extensions
 
-# Install PHP extensions
+# Install PCNTL extension (and other necessary extensions)
+RUN install-php-extensions pcntl
+
+# Install other PHP extensions
 RUN install-php-extensions \
     ctype \
     curl \
